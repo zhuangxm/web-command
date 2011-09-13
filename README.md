@@ -10,6 +10,8 @@ lein deps
 lein run
 ```
 
+open http://localhost:8080 to try.
+
 ## License
 
 Copyright (C) 2011 FIXME
