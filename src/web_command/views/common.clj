@@ -3,7 +3,7 @@
         hiccup.core
         hiccup.page-helpers))
 
-(def js-list ["jquery-1.4.2.min.js" "jquery.console.js" "web-command.js"])
+(def js-list ["main.js"])
 
 (defpartial layout [& content]
             (html5
@@ -23,13 +23,11 @@
                [:div#console]
                [:div#results] content]]))
 
-
 (defpartial build-head []
   [:head
    [:title "remote execute"]
    [:meta {:http-equiv "Content-Type" :content "text/html;charset=UTF-8"}]
-   (include-css "/css/main.css")
-   (include-js "/js/Debug.js")])
+   (include-css "/css/main.css")])
 
 (defpartial box [text id & contents]
   [:div.box
