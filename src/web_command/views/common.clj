@@ -3,27 +3,7 @@
         hiccup.core
         hiccup.page-helpers))
 
-(def js-list ["jquery-1.4.2.min.js" "jquery.console.js" "web-command.js"])
-
-(defpartial layout [& content]
-            (html5
-              [:head
-               [:title "web-command"]
-               (include-css "/css/reset.css")]
-              [:body
-               [:div#wrapper
-                content]]))
-
-(defpartial main-layout [& content]
-            (html5
-             [:head (include-css "/css/web-command.css")
-              (map #(include-js (str "/js/" %)) js-list)]
-             [:body
-              [:div#wrapper
-               [:div#console]
-               [:div#results] content]]))
-
-
+;;generate the html head
 (defpartial build-head []
   [:head
    [:title "remote execute"]
@@ -31,11 +11,13 @@
    (include-css "/css/main.css")
    (include-js "/js/Debug.js")])
 
+;;generate the div box with contents 
 (defpartial box [text id & contents]
   [:div.box
    [:div.tip [:h2 text]]
    (vec (concat [(keyword (str "div#" id ".box-in")) ] (vec contents)))])
 
+;;the main layout of the html
 (defpartial command-layout []
   (html5
    (build-head)
