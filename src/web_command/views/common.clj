@@ -1,33 +1,16 @@
 (ns web-command.views.common
-  (:use noir.core
-        hiccup.core
-        hiccup.page-helpers))
+  (:use [noir.core]
+        [hiccup core page-helpers]))
 
-(def js-list ["main.js"])
-
-(defpartial layout [& content]
-            (html5
-              [:head
-               [:title "web-command"]
-               (include-css "/css/reset.css")]
-              [:body
-               [:div#wrapper
-                content]]))
-
-(defpartial main-layout [& content]
-            (html5
-             [:head (include-css "/css/web-command.css")
-              (map #(include-js (str "/js/" %)) js-list)]
-             [:body
-              [:div#wrapper
-               [:div#console]
-               [:div#results] content]]))
-
-(defpartial build-head []
-  [:head
-   [:title "remote execute"]
-   [:meta {:http-equiv "Content-Type" :content "text/html;charset=UTF-8"}]
-   (include-css "/css/main.css")])
+(defpartial page-head
+  []
+  (let [jss ["bootstrap.js" "web_command/core.js"]
+        jss (map #(str "/cljs/" %) jss)]
+    [:head
+     [:title "remote execute"]
+     [:meta {:http-equiv "Content-Type" :content "text/html;charset=UTF-8"}]
+     (include-css "/css/main.css")
+     (map include-js jss)]))
 
 (defpartial box [text id & contents]
   [:div.box
@@ -36,7 +19,7 @@
 
 (defpartial command-layout []
   (html5
-   (build-head)
+   (page-head)
    [:body
     [:div.l-nav
      [:div.m-top
@@ -54,7 +37,8 @@
           [:div.btn-box
            [:a.btn-cancel {:href "javascript:;"} "清空指令"]
            [:a.btn-run {:href "javascript:;"} "立即执行"]])
-     (box "执行结果" "j_cmdResult")]]))
+     (box "执行结果" "j_cmdResult")]
+    (javascript-tag "goog.require('web-command.core')")]))
 
 
 
