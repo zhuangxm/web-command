@@ -8,15 +8,14 @@
   (:require [web-command.command :as command]
             [clojure.contrib.json :as json]))
 
+;;define the commands we support.
+;;TODO find a better to define the support commands list
 (def commands (command/get-commands 'clojure.core))
-
-(defpage "/welcome" []
-         (common/main-layout
-           [:p "Welcome to web-command"]))
 
 (defpage "/" []
   (common/command-layout))
 
+;;get the command list
 (defpage [:post "/getDoc"] {:keys [msgId]}
   {:headers {"Content-Type" "application/json"}
    :body (json/json-str
@@ -29,12 +28,12 @@
   the first is a function name of string
   the rest is other parameters"
   [command-map exprs]
-  (prn exprs " first : " (first exprs))
   (let [f (command/func-command (command-map (str (first exprs))))
-        result (apply f (rest exprs) )
-        _ (prn result)]
+        result (apply f (rest exprs) )]
     result))
 
+;;execute command
+;;url /eval.json?msgID=*1&code=*2
 (defpage [:post "/eval.json"] {:keys [msgID code]}
   (try
     (let [command-exprs (read-string code)] 
