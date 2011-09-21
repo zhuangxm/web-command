@@ -1,10 +1,13 @@
 (ns web-command.server
   (:require [noir.server :as server]
-            [noir.util.middleware :as middleware]))
+            [noir.util.middleware :as middleware]
+            [noir.pinot.remotes :as remote]))
 
 (server/load-views "src/web_command/views/")
 
-(server/add-middleware middleware/wrap-utf-8)
+;(server/add-middleware middleware/wrap-utf-8)
+
+(server/add-middleware remote/wrap-remotes)
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))

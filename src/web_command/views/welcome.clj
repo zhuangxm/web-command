@@ -1,28 +1,37 @@
 (ns web-command.views.welcome
-  (:require [web-command.views.common :as common]
-            [noir.content.pages :as pages]
-            [noir.response :as resp])
-  (:use noir.core
-        hiccup.core
-        hiccup.page-helpers)
+  (:use [noir.core]
+        [hiccup.core]
+        [hiccup.page-helpers])
   (:require [web-command.command :as command]
-            [clojure.contrib.json :as json]))
+            [clojure.data.json :as json]
+            [web-command.views.common :as common]
+            [noir.content.pages :as pages]
+            [noir.response :as resp]
+            [noir.pinot.remotes :as remote]))
 
 (def commands (command/get-commands 'clojure.core))
 
-(defpage "/welcome" []
-         (common/main-layout
-           [:p "Welcome to web-command"]))
+(defn function-data
+  "Returns a sorted seq of func-map"
+  [func-map]
+  (->> func-map vals (map #(dissoc % :func)) (sort-by :title)))
+
+(defpage "/hello" []
+  "Hello")
 
 (defpage "/" []
-  (common/command-layout))
+  (html
+   (common/page-head)
+   (common/command-layout)))
+
+(remote/defremote show-all-func []
+  (function-data commands))
 
 (defpage [:post "/getDoc"] {:keys [msgId]}
   {:headers {"Content-Type" "application/json"}
    :body (json/json-str
           [{:msgID "getDoc"
-            :data (sort-by #(:title %)
-                           (map #(dissoc % :func) (vals commands)))}])})
+            :data (function-data commands)}])})
 
 (defn execute-expr
   "execute a expression that is expressed like [+ 1 2 3] ,
