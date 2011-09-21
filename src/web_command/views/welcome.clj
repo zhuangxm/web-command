@@ -16,9 +16,6 @@
   [func-map]
   (->> func-map vals (map #(dissoc % :func)) (sort-by :title)))
 
-(defpage "/hello" []
-  "Hello")
-
 (defpage "/" []
   (html
    (common/page-head)

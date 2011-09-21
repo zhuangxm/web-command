@@ -4,7 +4,7 @@
 
 (defpartial page-head
   []
-  (let [jss ["bootstrap.js" "web_command/core.js"]
+  (let [jss ["bootstrap.js"]
         jss (map #(str "/cljs/" %) jss)]
     [:head
      [:title "remote execute"]
@@ -24,9 +24,7 @@
     [:div.m-top
      [:h2 "控制台"]]
     [:div.m-list
-     [:ul#j_docList
-      [:li "command1"]
-      [:li "command2"]]]]
+     [:ul#j_docList]]]
    [:div.r-con 
     (box "文档说明" "j_docContent" "这里是文档说明的内容" )
     (box "参数" "j_argList" "这里是命令参数")
