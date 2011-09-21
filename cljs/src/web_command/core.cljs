@@ -33,7 +33,7 @@
       (find-set "#j_argList" (:arglists func)))))
 
 (defn add-funcs
-  "Add a function descriptor to page"
+  "Display function descriptors to page"
   [display functions]
   (doseq [func functions
           :let [item (func-item func)]]
