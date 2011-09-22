@@ -5,8 +5,6 @@
 
 (server/load-views "src/web_command/views/")
 
-;(server/add-middleware middleware/wrap-utf-8)
-
 (server/add-middleware remote/wrap-remotes)
 
 (defn -main [& m]

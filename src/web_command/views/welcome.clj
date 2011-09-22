@@ -24,6 +24,9 @@
 (remote/defremote show-all-func []
   (function-data commands))
 
+(remote/defremote remote-eval [expr]
+  (eval (with-in-str expr (read))))
+
 (defpage [:post "/getDoc"] {:keys [msgId]}
   {:headers {"Content-Type" "application/json"}
    :body (json/json-str

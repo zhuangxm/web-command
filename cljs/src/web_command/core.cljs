@@ -42,10 +42,24 @@
   [{:keys [title]}]
   [:li {:id title} (tag/link-to "#" title)])
 
+(defn command-pane
+  []
+  (html/dom-find "textarea.editor"))
+
 (defn clear-command-pane
   []
-  (when-let [command-pane (html/dom-find "textarea.editor")]
-    (html/val command-pane "")))
+  (html/val (command-pane) ""))
+
+(defn display-result
+  [expr]
+  (html/text (html/dom-find "#j_cmdResult") (str expr)))
+
+(defn execute-cmd
+  []
+  (when-let [expr (html/val (command-pane))]
+    (log "to be executed: " expr)
+    (macro/remote (remote-eval expr) [result]
+                  (display-result result))))
 
 (defn find-set
   "Find a dom element, and set its text to content"
@@ -81,7 +95,9 @@
   "Setup all the events of the page"
   []
   (pm/on (html/dom-find "a.btn-cancel") :click
-         clear-command-pane))
+         clear-command-pane)
+  (pm/on (html/dom-find "a.btn-run") :click
+         execute-cmd))
 
 (defn start-app []
   (html/append-to (html/dom-find "body") (command-layout))
