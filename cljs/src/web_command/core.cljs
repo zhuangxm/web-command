@@ -42,6 +42,11 @@
   [{:keys [title]}]
   [:li {:id title} (tag/link-to "#" title)])
 
+(defn clear-command-pane
+  []
+  (when-let [command-pane (html/dom-find "textarea.editor")]
+    (html/val command-pane "")))
+
 (defn find-set
   "Find a dom element, and set its text to content"
   [name content]
@@ -72,8 +77,16 @@
         (for [{title :title :as func} functions]
           [title func])))
 
+(defn setup-events
+  "Setup all the events of the page"
+  []
+  (pm/on (html/dom-find "a.btn-cancel") :click
+         clear-command-pane))
+
 (defn start-app []
   (html/append-to (html/dom-find "body") (command-layout))
+  (setup-events)
+
   ;; Query the server to get all the functions
   (macro/remote
    (show-all-func) [functions]
