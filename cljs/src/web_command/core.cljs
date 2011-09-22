@@ -67,7 +67,7 @@
   (when-let [label (html/dom-find name)]
     (html/text label content)))
 
-(defn item-clicked
+(defn func-selected
   "When a function name clicked, it refresh the right pane."
   [item event]
   (let [id (html/attr item :id)]
@@ -82,7 +82,7 @@
   (doseq [func functions
           :let [item (func-item func)]]
     (html/append-to display item)
-    (pm/on item :click item-clicked)))
+    (pm/on item :click func-selected)))
 
 (defn functions->map
   "Convert function data returned from the server info a name->data map"
