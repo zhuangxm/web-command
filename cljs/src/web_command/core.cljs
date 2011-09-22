@@ -1,17 +1,42 @@
 (ns web-command.core
   (:require [pinot.remotes :as remote]
             [pinot.html :as html]
+            [goog.dom :as dom]
             [pinot.html.tags :as tag]
             [pinot.events :as pm]
             [goog.events :as events])
   (:require-macros [pinot.macros :as macro]))
 
-;;Store all the server functions' data
-(def all-functions (atom {}))
-
 (defn log
   [& args]
   (.log js/console (apply str args)))
+
+(macro/defpartial box [text id & contents]
+  [:div.box
+   [:div.tip [:h2 text]]
+   (vec (concat [(keyword (str "div#" id ".box-in")) ] (vec contents)))])
+
+;; Content layout
+(macro/defpartial command-layout []
+  [:div#content
+   [:div.l-nav
+    [:div.m-top
+     [:h2 "控制台"]]
+    [:div.m-list
+     [:ul#j_docList]]]
+   [:div.r-con 
+    (box "文档说明" "j_docContent" "这里是文档说明的内容" )
+    (box "参数" "j_argList" "这里是命令参数")
+    (box "代码执行" "j_editor"
+         [:textarea.editor {:rows 10 :name "content"}
+          "请输入您的要执行的指令！" ]
+         [:div.btn-box
+          [:a.btn-cancel {:href "javascript:;"} "清空指令"]
+          [:a.btn-run {:href "javascript:;"} "立即执行"]])
+    (box "执行结果" "j_cmdResult")]])
+
+;;Store all the server functions' data
+(def all-functions (atom {}))
 
 (macro/defpartial func-item
   [{:keys [title]}]
@@ -47,10 +72,20 @@
         (for [{title :title :as func} functions]
           [title func])))
 
-;; Query the server to get all the functions
-(macro/remote
- (show-all-func) [functions]
- (log "Function count: " (count functions))
- (reset! all-functions (functions->map functions))
- (when-let [display (html/dom-find "#j_docList")]
-   (add-funcs display functions)))
+(defn start-app []
+  (html/append-to (html/dom-find "body") (command-layout))
+  ;; Query the server to get all the functions
+  (macro/remote
+   (show-all-func) [functions]
+   (log "Function count: " (count functions))
+   (reset! all-functions (functions->map functions))
+   (when-let [display (html/dom-find "#j_docList")]
+     (add-funcs display functions))))
+
+(let [document (dom/getDocument)]
+  (events/listen
+   document
+   goog.events.EventType/READYSTATECHANGE
+   (fn []
+     (when (== "complete" (.readyState document))
+       (start-app)))))
