@@ -16,6 +16,7 @@
      (include-css "/css/main.css")
      (map include-js jss)]))
 
+;;the main layout of the html
 (defpartial command-layout []
   [:body])
 
