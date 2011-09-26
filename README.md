@@ -1,7 +1,12 @@
 # web-command
 
 a web application that user can use web to execute commands that have been exported.
-A website written in noir. 
+A web site written in noir and pinot (for clojurescript). 
+
+## Developement
+
+For better result, using cljs-watch to compile and automatically
+re-compile.
 
 ## Usage
 
