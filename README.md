@@ -5,10 +5,16 @@ A web site written in noir and pinot (for clojurescript).
 
 ## Developement
 
-For better result, using cljs-watch to compile and automatically
-re-compile.
+Since clojurescript is still in pre-alpha phase, there is no mature
+solution for integrate cljs development into normal clojure
+project.
 
-## Usage
+ 1. follow [clojurescript QuickStart](https://github.com/clojure/clojurescript/wiki/Quick-Start)
+ to setup clojurescript environment.
+ 1. follow [cljs-watch](https://github.com/ibdknox/cljs-watch) to
+ setup cljs-watch to have the cljs compiled automatically.
+
+After cljs was compiled, call leiningen to run the server.
 
 ```bash
 lein deps
