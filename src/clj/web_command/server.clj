@@ -3,7 +3,7 @@
             [noir.util.middleware :as middleware]
             [noir.pinot.remotes :as remote]))
 
-(server/load-views "src/web_command/views/")
+(server/load-views "src/clj/web_command/views/")
 
 (server/add-middleware remote/wrap-remotes)
 
